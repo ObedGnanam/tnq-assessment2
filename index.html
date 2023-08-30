@@ -1,0 +1,173 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <style>
+        .container {
+          border: 1px solid #ccc;
+          padding: 50px;
+          text-align: center;
+          width: 60%;
+          margin: auto;
+        }
+        
+        table {
+          border-collapse: collapse;
+          width: 100%;
+          text-align: center;
+          border: 1px solid #ccc;
+        }
+
+        
+        
+        th, td {
+          text-align: center;
+          padding: 30px;
+          border: 1px solid #ccc;
+        }
+        
+        tr:nth-child(even){background-color: #f2f2f2}
+        
+        th {
+          background-color: #dae8fc;
+          color: #333333;
+        }
+
+        /* Hide table header by default */
+        thead {
+          display: none;
+        }
+
+        /* Flex layout for dropdown and button */
+        .select-btn-container {
+          display: flex;
+          justify-content: center;
+          align-items: center;
+        }
+
+        /* Margin for the button */
+        #loadButton {
+          margin-left: 10px;
+        }
+        
+       
+    </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fetch and Table</title>
+</head>
+<body>
+  <div class="container">
+    <h1>Fetch and Table</h1>
+    
+    <div class="select-btn-container">
+      <select id="dataSelector">
+        <option value="data1">Active</option>
+        <option value="data2">Retired</option>
+        <option value="data3">Unknown</option>
+        <option value="data4">Destroyed</option>
+      </select>
+      <button id="loadButton">Load</button>
+    </div>
+    
+    <h2 id="dataHeading"></h2>
+    
+    <table id="dataTable">
+      <thead>
+        <tr id="dataHeaderRow" >
+            <th colspan="3" style="background-color: #1ba1e2; color: #ffffff;">Data: Active</th>
+          </tr>        
+        <tr>
+          <th>Capsule ID</th>
+          <th>No of missions</th>
+          <th>Details</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+  </div>
+
+  <script>
+    const jsonData = {
+      data1: [
+        { id: 106, name: '3', email: 'First dragon capsule to be used' },
+        { id: 205, name: '1', email: 'In construction for use in first mission' },
+        { id: 307, name: '7', email: 'Rumoured to be used for Inflight' }
+      ],
+      data2: [
+        { id: 401, name: '5', email: 'Rumoured to be used for Inflight' },
+        { id: 402, name: '2', email: 'First dragon capsule to be used' },
+        { id: 403, name: '4', email: 'In construction for use in first mission' }
+      ],
+      data3: [
+        { id: 501, name: '8', email: 'In construction for use in first mission' },
+        { id: 502, name: '9', email: 'Rumoured to be used for Inflight' },
+        { id: 503, name: '6', email: 'First dragon capsule to be used' }
+      ],
+      data4: [
+        { id: 601, name: '10', email: 'Rumoured to be used for Inflight' },
+        { id: 602, name: '11', email: 'In construction for use in first mission' },
+        { id: 603, name: '12', email: 'First dragon capsule to be used' }
+      ]
+    };
+    
+    const dataSelector = document.getElementById('dataSelector');
+    const loadButton = document.getElementById('loadButton');
+    const dataHeading = document.getElementById('dataHeading');
+    const dataHeaderRow = document.getElementById('dataHeaderRow');
+    const dataTable = document.getElementById('dataTable');
+    const dataTableBody = dataTable.querySelector('tbody');
+    const tableHead = dataTable.querySelector('thead');
+
+    dataSelector.addEventListener('change', () => {
+  updateDataHeader(dataSelector.value); // Update the data header when dropdown value changes
+});
+
+loadButton.addEventListener('click', () => {
+  const selectedData = jsonData[dataSelector.value];
+
+  if (selectedData) {
+    renderTable(selectedData);
+    showDataHeading(dataSelector.value);
+    updateDataHeader(dataSelector.value);
+  }
+});
+
+    function renderTable(data) {
+      dataTableBody.innerHTML = '';
+      tableHead.style.display = 'table-header-group'; // Show the table header
+
+      data.forEach(item => {
+        const row = document.createElement('tr');
+        const idCell = document.createElement('td');
+        const nameCell = document.createElement('td');
+        const emailCell = document.createElement('td');
+
+        idCell.textContent = item.id;
+        nameCell.textContent = item.name;
+        emailCell.textContent = item.email;
+
+        row.appendChild(idCell);
+        row.appendChild(nameCell);
+        row.appendChild(emailCell);
+
+        dataTableBody.appendChild(row);
+      });
+    }
+
+    // function showDataHeading(dataValue) {
+    //   const dataName = dataSelector.querySelector(`option[value="${dataValue}"]`).textContent;
+    //   dataHeading.textContent = `Data: ${dataName}`;
+    // }
+
+    function updateDataHeader(dataValue) {
+  const dataName = dataSelector.querySelector(`option[value="${dataValue}"]`).textContent;
+  const headerCell = dataHeaderRow.querySelector('th');
+  headerCell.textContent = `Data: ${dataName}`;
+  
+  // Change background color here
+  headerCell.style.backgroundColor = '#1ba1e2'; // Replace 'green' with your desired color
+}
+  </script>
+</body>
+</html>
